@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#a9d9d3">
+  <title>DREAMTOWN — Cozy Island Builder</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-root">
+    <canvas id="world"></canvas>
+
+    <section id="main-menu" class="screen">
+      <div class="menu-card">
+        <div class="brand-mark">✦</div>
+        <p class="eyebrow">A LITTLE WORLD OF YOUR OWN</p>
+        <h1>DREAM<span>TOWN</span></h1>
+        <p class="tagline">Build a place that feels like home.</p>
+        <div class="menu-actions">
+          <button class="primary" id="play-btn">PLAY</button>
+          <button id="continue-btn">CONTINUE</button>
+          <button id="new-world-btn">NEW WORLD</button>
+          <button id="settings-btn">SETTINGS</button>
+        </div>
+        <p class="menu-note">A cozy island builder · v1.0</p>
+      </div>
+      <div class="menu-cloud cloud-a"></div><div class="menu-cloud cloud-b"></div>
+    </section>
+
+    <section id="settings-panel" class="modal hidden">
+      <div class="modal-card">
+        <button class="close-btn" id="close-settings" aria-label="Close">×</button>
+        <p class="eyebrow">MAKE YOURSELF AT HOME</p><h2>Settings</h2>
+        <label class="setting-row">Sound <input id="sound-toggle" type="checkbox" checked></label>
+        <label class="setting-row">Show building hints <input id="hints-toggle" type="checkbox" checked></label>
+        <p class="small-muted">Your worlds are saved in this browser on this device.</p>
+      </div>
+    </section>
+
+    <section id="game-ui" class="hidden">
+      <header class="topbar">
+        <div class="mini-brand"><span>✦</span> DREAMTOWN</div>
+        <div class="world-label" id="world-label">SUNNY ISLE</div>
+        <div class="top-actions">
+          <span class="count-pill" id="building-count">0 objects</span>
+          <button class="icon-btn" id="undo-btn" title="Undo">↶</button>
+          <button class="icon-btn" id="save-btn" title="Save">▣</button>
+          <button class="icon-btn" id="load-btn" title="Load">▤</button>
+          <button class="icon-btn" id="export-btn" title="Export JSON">⇩</button>
+          <button class="icon-btn" id="import-btn" title="Import JSON">⇧</button>
+          <button class="icon-btn" id="clear-btn" title="Clear island">⌫</button>
+          <button class="icon-btn" id="home-btn" title="Main menu">⌂</button>
+        </div>
+      </header>
+
+      <aside class="tool-panel">
+        <div class="panel-heading"><span>BUILD</span><span class="tiny-dot"></span></div>
+        <div class="tool-grid" id="tool-grid">
+          <button class="tool active" data-tool="house"><span class="tool-icon">⌂</span><span>House</span></button>
+          <button class="tool" data-tool="tall"><span class="tool-icon">▥</span><span>Tall</span></button>
+          <button class="tool" data-tool="tower"><span class="tool-icon">♜</span><span>Tower</span></button>
+          <button class="tool" data-tool="castle"><span class="tool-icon">♛</span><span>Castle</span></button>
+          <button class="tool" data-tool="shop"><span class="tool-icon">▣</span><span>Shop</span></button>
+          <button class="tool" data-tool="tree"><span class="tool-icon">♣</span><span>Tree</span></button>
+          <button class="tool" data-tool="flower"><span class="tool-icon">✿</span><span>Flower</span></button>
+          <button class="tool" data-tool="bush"><span class="tool-icon">❀</span><span>Bush</span></button>
+          <button class="tool" data-tool="lamp"><span class="tool-icon">♨</span><span>Lamp</span></button>
+          <button class="tool" data-tool="bridge"><span class="tool-icon">⌁</span><span>Bridge</span></button>
+          <button class="tool" data-tool="path"><span class="tool-icon">┄</span><span>Path</span></button>
+          <button class="tool" data-tool="water"><span class="tool-icon">≈</span><span>Water</span></button>
+          <button class="tool erase-tool" data-tool="eraser"><span class="tool-icon">⌫</span><span>Eraser</span></button>
+        </div>
+        <div class="panel-divider"></div>
+        <div class="panel-heading"><span>PALETTE</span></div>
+        <div class="palette" id="palette">
+          <button class="swatch selected" data-color="#f4a9b8" style="--swatch:#f4a9b8" aria-label="Pink"></button>
+          <button class="swatch" data-color="#f5bd9b" style="--swatch:#f5bd9b" aria-label="Peach"></button>
+          <button class="swatch" data-color="#8ecbd8" style="--swatch:#8ecbd8" aria-label="Blue"></button>
+          <button class="swatch" data-color="#9ed6b8" style="--swatch:#9ed6b8" aria-label="Mint"></button>
+          <button class="swatch" data-color="#f4d77f" style="--swatch:#f4d77f" aria-label="Yellow"></button>
+          <button class="swatch" data-color="#b8a4d9" style="--swatch:#b8a4d9" aria-label="Lilac"></button>
+          <button class="swatch" data-color="#f5f0e7" style="--swatch:#f5f0e7" aria-label="White"></button>
+          <button class="swatch" data-color="#dfc9a6" style="--swatch:#dfc9a6" aria-label="Cream"></button>
+          <button class="swatch" data-color="#a87961" style="--swatch:#a87961" aria-label="Brown"></button>
+          <label class="custom-swatch" title="Custom color">＋<input id="custom-color" type="color" value="#f4a9b8"></label>
+        </div>
+        <div class="panel-hint" id="tool-hint">Choose a spot on the island to place a house.</div>
+      </aside>
+
+      <div class="bottom-controls">
+        <div class="camera-hint">DRAG TO ORBIT <span>·</span> SCROLL TO ZOOM</div>
+        <button id="reset-camera" class="soft-btn">◎ Reset view</button>
+        <button id="time-toggle" class="soft-btn">☼ Day</button>
+      </div>
+      <div id="toast" class="toast"></div>
+      <input type="file" id="import-file" accept="application/json,.json" hidden>
+    </section>
+  </div>
+  <script type="module" src="game.js"></script>
+</body>
+</html>
